@@ -1,0 +1,17 @@
+with cte as
+(
+select u1.u_id,
+       u1.u_name,
+       t1.training_date,
+       t1.training_id,
+       count(*) over (partition by u1.u_id, t1.training_date, t1.training_id) as counts
+from users_training u1
+left join training_details t1
+on u1.u_id = t1.u_id
+)
+select distinct u_name,
+       training_date,
+       training_id,
+       counts
+from cte
+where counts > 1
