@@ -1,0 +1,6 @@
+select ab1.book_id,
+       ifnull(sum(ab1.unit_price*ab2.quantity),0) as total_amt
+from amazon_books ab1
+left join amazon_books_order_details ab2
+on ab1.book_id = ab2.book_id
+group by 1
