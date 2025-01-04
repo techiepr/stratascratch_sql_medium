@@ -1,0 +1,16 @@
+select user_id
+from
+(
+select user_id, count(distinct years) as num_years
+from 
+(
+select user_id,
+       date_format(order_date, '%Y') as years,
+       count(*) as num_orders
+from amazon_orders
+group by 1,2
+)x
+where x.num_orders >= 3
+and x.years in ('2020', '2021')
+group by 1
+having num_years = 2)y  
