@@ -1,0 +1,14 @@
+select first_name, last_name
+from az_employees
+where position like '%manager%'
+and department_id in
+(select department_id
+from 
+(
+select department_id,
+       count(*) as num,
+       rank() over (order by count(*) desc) rnk
+from az_employees
+group by 1
+)x
+where x.rnk = 1)
