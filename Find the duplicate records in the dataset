@@ -1,0 +1,13 @@
+with cte as
+(
+select worker_title,
+       affected_from,
+       count(*) as num
+from title
+group by 1,2
+)
+select worker_title,
+       affected_from,
+       num
+from cte
+where num > 1
