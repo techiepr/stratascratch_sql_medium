@@ -1,0 +1,14 @@
+with cte as
+(
+select worker_id,
+       salary,
+       department,
+       rank() over (order by salary desc) as rnks
+from worker
+)
+select worker_id,
+       salary,
+       department
+from cte
+where rnks <= 10
+order by salary desc
