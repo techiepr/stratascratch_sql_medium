@@ -1,0 +1,13 @@
+with cte as
+(
+select cust_id,
+       date_format(order_date, '%Y-%m') as month_years,
+       sum(total_order_cost) as revenue
+from orders
+where date_format(order_date, '%Y-%m') = '2019-03'
+group by 1,2
+order by 3 desc
+)
+select cust_id,
+       revenue
+from cte
