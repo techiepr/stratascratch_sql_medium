@@ -1,0 +1,26 @@
+with cte as
+(
+select month(date) as months,
+       product_id,
+       sum((units_sold)*(cost_in_dollars)) as total_cost
+from online_orders
+where month(date) in ('4','5')
+group by 1,2
+order by 1,2
+), cte1 as
+(
+select product_id,
+       total_cost,
+       months,
+       lag(total_cost) over (partition by product_id order by months) as previous_cost
+from cte
+), cte2 as
+(
+select product_id,
+       (total_cost-previous_cost)/previous_cost*100 as per_gro
+from cte1
+)
+select product_id,
+       per_gro
+from cte2
+where per_gro > 10
