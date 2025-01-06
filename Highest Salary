@@ -1,0 +1,11 @@
+with cte as
+(
+select first_name,
+        salary,
+        rank() over (order by salary desc) as rnk
+from worker
+)
+select first_name,
+       salary
+from cte
+where rnk = 1
