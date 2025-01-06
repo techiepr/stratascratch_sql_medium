@@ -1,0 +1,10 @@
+select distinct first_name as cust_id
+from customers c
+where c.id not in
+(
+select c.id 
+from customers c
+left join orders o
+on c.id = o.cust_id
+where o.order_date between '2019-02-01' and '2019-03-01'
+)
