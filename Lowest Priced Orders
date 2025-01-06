@@ -1,0 +1,15 @@
+with cte as
+(
+select distinct c.id,
+       c.first_name,
+       total_order_cost,
+       dense_rank() over (partition by c.id, c.first_name order by total_order_cost) rnk
+from customers c
+join orders o
+on c.id = o.cust_id
+)
+select id,
+       first_name,
+       total_order_cost
+from cte
+where rnk = 1
