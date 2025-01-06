@@ -1,0 +1,15 @@
+with cte as
+(
+select *,
+      row_number() over (order by worker_id) as rwn,
+      count(*) over () as counts
+from worker
+)
+select worker_id,
+       first_name,
+       last_name,
+       salary,
+       joining_date,
+       department
+from cte
+where rwn <= 0.5*counts
