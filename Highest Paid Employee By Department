@@ -1,0 +1,13 @@
+with cte as
+(
+select department,
+       worker_id,
+       salary,
+       rank() over (partition by department order by salary desc) as rnk
+from worker
+)
+select department,
+       worker_id,
+       salary
+from cte
+where rnk = 1
