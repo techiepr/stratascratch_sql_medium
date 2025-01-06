@@ -1,0 +1,10 @@
+select c.first_name,
+       c.city,
+       count(o.id) as num_orders,
+       sum(o.total_order_cost) as total_cost
+from customers c
+join orders o
+on c.id = o.cust_id
+group by 1,2
+having num_orders >3
+and total_cost > 100
