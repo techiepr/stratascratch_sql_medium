@@ -1,0 +1,13 @@
+with cte as
+(
+select department,
+       concat(first_name,' ',last_name) as full_name,
+       salary,
+       rank() over (partition by department order by salary desc) as rnk
+from worker
+)
+select department,
+       full_name,
+       salary
+from cte
+where rnk = 1
