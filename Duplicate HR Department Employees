@@ -1,0 +1,15 @@
+with cte as
+(
+select w1.first_name,
+       w1.department
+from worker w1 
+where w1.department = 'HR'
+union all
+select w1.first_name,
+       w1.department
+from worker w1 
+where w1.department = 'HR'
+)
+select first_name,
+       department
+from cte
