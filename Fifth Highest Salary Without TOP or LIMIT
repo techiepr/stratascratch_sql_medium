@@ -1,0 +1,9 @@
+with cte as
+(
+select salary,
+       rank() over (order by salary desc) as dns_rnk
+from worker
+)
+select distinct salary
+from cte
+where dns_rnk = 5
