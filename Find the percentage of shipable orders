@@ -1,0 +1,10 @@
+with cte as
+(
+select o.id as order_id,
+       c.address as cust_add
+from orders o
+left join customers c
+on o.cust_id = c.id
+)
+select count(cust_add)*100/count(order_id) as per
+from cte
