@@ -14,3 +14,22 @@ where x.num_orders >= 3
 and x.years in ('2020', '2021')
 group by 1
 having num_years = 2)y  
+
+
+--------------------------------------X------------------------------------------------
+
+
+with cte as
+(
+select user_id,
+       date_format(order_date,'%Y') years,
+       count(*) as num_order
+from amazon_orders
+where date_format(order_date,'%Y') in ('2020','2021')
+group by 1,2
+having num_order >= 3
+)
+select user_id
+from cte
+group by user_id
+having count(user_id) = 2
