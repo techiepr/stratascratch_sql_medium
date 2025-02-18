@@ -1,23 +1,24 @@
-with manager_salaries as
+WITH manager_salaries AS
 (
-select m1.manager_empl_id as manager_id,
-       e1.salary as manager_salary
-from map_employee_hierarchy m1
-left join dim_employee e1
-on m1.manager_empl_id = e1.empl_id
-), employee_salaries as
+    SELECT DISTINCT m1.manager_empl_id AS manager_id,
+           e1.salary AS manager_salary
+    FROM map_employee_hierarchy m1
+    LEFT JOIN dim_employee e1
+    ON m1.manager_empl_id = e1.empl_id
+), 
+employee_salaries AS
 (
-select m2.manager_empl_id as manager_id,
-       avg(e2.salary) as avg_employee_salary
-from map_employee_hierarchy m2
-left join dim_employee e2
-on m2.empl_id = e2.empl_id
-group by 1
+    SELECT m2.manager_empl_id AS manager_id,
+           AVG(e2.salary) AS avg_employee_salary
+    FROM map_employee_hierarchy m2
+    LEFT JOIN dim_employee e2
+    ON m2.empl_id = e2.empl_id
+    GROUP BY m2.manager_empl_id
 )
-select distinct m.manager_id,
+SELECT m.manager_id,
        m.manager_salary,
        e.avg_employee_salary
-from manager_salaries m
-join employee_salaries e
-on m.manager_id = e.manager_id
-where m.manager_salary < 2*avg_employee_salary
+FROM manager_salaries m
+JOIN employee_salaries e
+ON m.manager_id = e.manager_id
+WHERE m.manager_salary < 2 * e.avg_employee_salary;
