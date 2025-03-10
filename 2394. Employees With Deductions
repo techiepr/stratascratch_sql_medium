@@ -1,0 +1,17 @@
+WITH cte AS (
+    SELECT SUM(CEIL(TIMESTAMPDIFF(SECOND, in_time, out_time) / 60)) AS times,
+           employee_id
+    FROM logs
+    GROUP BY employee_id
+),
+cte1 AS (
+    SELECT e1.employee_id,
+           IFNULL(times, 0) AS hours,  -- If no logs exist, set work hours to 0
+           needed_hours * 60 AS needed_hour  -- Convert required hours to minutes
+    FROM employees e1
+    LEFT JOIN cte c1
+    ON e1.employee_id = c1.employee_id
+)
+SELECT DISTINCT employee_id
+FROM cte1
+WHERE hours < needed_hour;
