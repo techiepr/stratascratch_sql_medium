@@ -1,3 +1,11 @@
+select cust_id
+       ,sum(total_order_cost)
+from orders
+where date_format(order_date,'%Y-%m') = "2019-03"
+group by cust_id
+
+
+
 with cte as
 (
 select cust_id,
