@@ -1,5 +1,20 @@
 with cte as
 (
+select month(b1.order_date) as month
+       ,sum(unit_price*quantity) as sales
+from amazon_books a1
+join book_orders b1
+on a1.book_id = b1.book_id
+where year(b1.order_date) = 2022
+group by date_format(b1.order_date, '%m')
+)
+select *
+      ,round(avg(sales) over (order by month),0) as rolling_avg
+from cte
+
+
+with cte as
+(
 select  month(bo.order_date) as months,
         sum(bo.quantity*ab.unit_price) as total
 from amazon_books ab
