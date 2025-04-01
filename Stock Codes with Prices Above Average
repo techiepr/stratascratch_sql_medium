@@ -1,3 +1,14 @@
+select productcode
+       ,unitprice
+from online_retails
+where quantity > 0
+and unitprice > (select avg(unitprice) from online_retails where quantity > 0)
+
+
+
+
+
+
 select distinct productcode,
        unitprice
 from online_retails
