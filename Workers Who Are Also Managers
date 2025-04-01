@@ -1,3 +1,13 @@
+select first_name
+       ,worker_title
+from worker w1
+join title t1
+on w1.worker_id = t1.worker_ref_id
+where worker_title like '%manager%'
+
+
+
+
 select first_name,
        worker_title
 from worker w
