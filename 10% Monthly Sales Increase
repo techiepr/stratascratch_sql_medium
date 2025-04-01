@@ -1,5 +1,52 @@
 with cte as
 (
+select product_id 
+       ,month(date_sold) as months
+       ,sum(cost_in_dollars*units_sold) as price
+from online_orders
+where month(date_sold) in (4,5)
+group by product_id,month(date_sold)
+order by product_id
+)
+,cte1 as
+(
+select product_id
+      ,months
+      ,price as current_month
+      ,lag(price) over (partition by product_id order by months) as previous_month
+from cte
+), cte2 as
+(
+select product_id
+       ,months
+      ,(current_month-previous_month)/previous_month*100 as percentage_increase
+from cte1
+)
+select product_id,
+       percentage_increase
+from cte2
+where percentage_increase >10
+       
+
+       
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+with cte as
+(
 select month(date) as months,
        product_id,
        sum((units_sold)*(cost_in_dollars)) as total_cost
