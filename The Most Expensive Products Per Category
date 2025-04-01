@@ -1,0 +1,19 @@
+with cte as
+(
+select product_category
+       ,product_name
+       ,cast(substring(price,2) as decimal(10,2)) as prices
+from innerwear_amazon_com
+), cte1 as
+(
+select product_category
+       ,product_name
+       ,prices
+       ,dense_rank() over (partition by product_category order by prices desc) as dns_rnk
+from cte
+)
+select product_category
+       , product_name
+       ,prices
+from cte1
+where dns_rnk = 1
